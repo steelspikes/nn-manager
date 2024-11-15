@@ -1,5 +1,5 @@
 import React from "react";
-import './Styles/styles.css'; // Importa el archivo de estilos
+import '../Styles/styles.css'; // Importa el archivo de estilos
 
 function Login() {
   const hola = (e) => {
