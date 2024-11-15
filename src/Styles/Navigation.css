@@ -1,3 +1,5 @@
-nav {
-    background-color: var(--pink-3);
+.nav {
+    nav {
+        background-color: var(--pink-3);
+    }
 }
