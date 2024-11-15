@@ -1,14 +1,19 @@
-import React from "react";
-import '../Styles/styles.css'; // Importa el archivo de estilos
+import React, { useState } from "react";
+import '../Styles/Login.css'; // Importa el archivo de estilos
 
 function Login() {
-  const hola = (e) => {
-    e.preventDefault();
-    alert('Hola');
-  }
+  const [isRightPanelActive, setIsRightPanelActive] = useState(false);
+
+  const handleSignUpClick = () => {
+    setIsRightPanelActive(true);
+  };
+
+  const handleSignInClick = () => {
+    setIsRightPanelActive(false);
+  };
 
   return (
-    <div className="container" id="container">
+    <div className={`container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
       <div className="form-container sign-up-container">
         <form action="#">
           <h1>Crear cuenta</h1>
@@ -16,7 +21,7 @@ function Login() {
           <input type="email" placeholder="Correo" />
           <input type="password" placeholder="Contraseña" />
           <input type="password" placeholder="Confirmar contraseña" />
-          <button onClick={hola} className="ghost">Registrarse</button>
+          <button className="ghost">Registrarse</button>
         </form>
       </div>
       <div className="form-container sign-in-container">
@@ -25,7 +30,7 @@ function Login() {
           <input type="email" placeholder="Correo" />
           <input type="password" placeholder="Contraseña" />
           <a href="#">¿Olvidaste tu contraseña?</a>
-          <button onClick={hola}>Ingresar</button>
+          <button>Ingresar</button>
         </form>
       </div>
       <div className="overlay-container">
@@ -33,12 +38,12 @@ function Login() {
           <div className="overlay-panel overlay-left">
             <h1>Ya eres miembro!</h1>
             <p>Para ingresar solo necesitas tu correo y contraseña</p>
-            <button className="ghost" id="signIn">Ingresar</button>
+            <button className="ghost" onClick={handleSignInClick}>Ingresar</button>
           </div>
           <div className="overlay-panel overlay-right">
             <h1>Aun no eres miembro</h1>
             <p>Crea una cuenta para que puedas acceder a todos nuestras funciones</p>
-            <button className="ghost" id="signUp">Registrarse</button>
+            <button className="ghost" onClick={handleSignUpClick}>Registrarse</button>
           </div>
         </div>
       </div>
