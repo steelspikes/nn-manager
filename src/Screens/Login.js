@@ -1,5 +1,5 @@
 import React from "react";
-import '/Users/hectorroblesperez/Documents/GitHub/nn-manager/src/Styles/styles.css'; // Importa el archivo de estilos
+import './Styles/styles.css'; // Importa el archivo de estilos
 
 function Login() {
   const hola = (e) => {
