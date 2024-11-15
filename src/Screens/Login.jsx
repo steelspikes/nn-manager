@@ -13,7 +13,9 @@ function Login() {
   };
 
   return (
-    <div className={`container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
+   <div className = "login">
+     <div className="body">
+     <div className={`container ${isRightPanelActive ? "right-panel-active" : ""}`} id="container">
       <div className="form-container sign-up-container">
         <form action="#">
           <h1>Crear cuenta</h1>
@@ -48,6 +50,8 @@ function Login() {
         </div>
       </div>
     </div>
+     </div>
+        </div>
   );
 }
 
