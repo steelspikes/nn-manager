@@ -36,7 +36,7 @@ function PerceptronModel() {
         const tempLayers = [...layers];
         const tempLayersAct = [...layersActivations];
         tempLayers.splice(tempLayers.length - 1, 0, 1)
-        tempLayersAct.splice(tempLayers.length - 1, 0, 'linear')
+        tempLayersAct.splice(tempLayersAct.length - 1, 0, 'linear')
         setLayers(tempLayers);
         setLayersActivations(tempLayersAct);
     }
