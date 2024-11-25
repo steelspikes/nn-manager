@@ -45,7 +45,8 @@ function PerceptronModel() {
         linear: 'Lineal',
         relu: 'ReLU',
         tanh: 'TanH',
-        sigmoid: 'Sigmoide'
+        sigmoid: 'Sigmoide',
+        softMax: 'Soft Max'
     }
 
     const onChangeActivation = (e, i) => {
