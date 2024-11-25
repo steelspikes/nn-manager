@@ -42,6 +42,7 @@
 	button {
 		border-radius: 15px;
 		border: 1px solid var(--pink-1);
+		/*border: 1px solid var(--pink-1);*/
 		background-color: var(--green-2);
 		color: black;
 		font-size: 12px;

@@ -7,6 +7,13 @@ import PerceptronPlot from './Fragments/PerceptronPlot';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import PerceptronModel from './Screens/PerceptronModel';
 import Data from './Screens/Data';
+import './App.css';
+import Login from './Screens/Login';
+import Navigation from './Fragments/Navigation';
+import './Styles/styles.css';
+import PaginaPrincipal from './Screens/PaginaPrincipal'; // Ajusta la ruta según tu estructura de carpetas
+import Projects from './Screens/Projects';
+import PerceptronPlot from './Fragments/PerceptronPlot';
 
 function App() {
   return (
