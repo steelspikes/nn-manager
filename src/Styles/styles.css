@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
-:root
-{
+:root {
 	--white: #fff;
 	--black: #000;
 	--green-1: #3f827c;
 	--green-2: #41a9a1;
-	--yellow-1: #f5f5dc;
-	--yellow-2: #fcfcb3;
-	--yellow-3: #fdfd8a;
+	--pink-1: #f5f5dc;
+	--pink-2: #fcfcb3;
+	--pink-3: #fdfd8a;
 }
 
 * {
