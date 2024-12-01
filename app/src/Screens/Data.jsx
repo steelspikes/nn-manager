@@ -1,26 +1,21 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import PerceptronPlot from "../Fragments/PerceptronPlot";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faMinus, faMinusCircle, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import Papa from 'papaparse';
-import {debounce} from '../Utils/Utils';
+import { debounce } from '../Utils/Utils';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom'
+import DataContext from "../Contexts/DataContext";
 
 function Data() {
-    const [rows, setRows] = useState([
-        [1, 2],
-        [2, 4],
-        [3, 6],
-        [4, 8]
-    ])
+    const navigate = useNavigate();
+    const { rows, setRows, columns, setColumns, setInputs, setOutputs } = useContext(DataContext);
 
-    const [columns, setColumns] = useState([
-        ['X', 'int', '0'], //Entrada
-        ['Y', 'int', '1'] //Salida
-    ]);
-
-    const [uniqueValues, setUniqueValues] = useState([]);
-
-    const [resultType, setResultType] = useState('regression');
+    const CODIFICATIONS = {
+        none: 'Ninguna',
+        onehot: 'One Hot'
+    }
 
     const inputRef = useRef(null);
 
@@ -37,16 +32,11 @@ function Data() {
     }
 
     const TYPES = {
-        int: 'Entero',
+        number: 'Numero',
         string: 'Cadena',
         image: '* Imagen',
         audio: '* Audio',
         temporalSerie: '* Serie temporal'
-    }
-
-    const RESULT_TYPE = {
-        classification: 'Clasificación',
-        regression: 'Regresión'
     }
 
     const swapInputOutput = (i) => {
@@ -61,31 +51,25 @@ function Data() {
         setColumns(tempColumns);
     }
 
-    useEffect(() => {
-        if(resultType === 'classification') {
-            updateUniqueValues();
-        }
-    }, [rows, resultType]);
+    const getUniqueValues = (column) => {
+        const uniques = [];
 
-    const updateUniqueValues = () => {
-        const uniques = Array.from({ length: rows[0].length }, () => []);
-
-        for(let i in rows) {
-            for(let j in rows[i]) {
-                if(!uniques[j].includes(rows[i][j])) {
-                    uniques[j].push(rows[i][j]);
+        for (let i in rows) {
+            for (let j in rows[i]) {
+                if (column === Number(j) && !uniques.includes(rows[i][j])) {
+                    uniques.push(rows[i][j]);
                 }
             }
         }
 
-        setUniqueValues(uniques);
+        return uniques;
     }
 
     const addColumn = () => {
         const tempRows = [...rows];
         const tempCols = [...columns];
 
-        tempCols.push(['Unamed Column', 'int', '0']);
+        tempCols.push(['Unamed Column', 'number', '0', 'none']);
 
         for (let i in tempRows) {
             tempRows[i] = [...tempRows[i], ''];
@@ -106,11 +90,18 @@ function Data() {
     const configureData = (data) => {
         const tempRows = [];
 
-        for(let d of data) {
+        for (let d of data) {
+            console.log(Object.values(d))
             tempRows.push(Object.values(d));
         }
-        
-        setColumns(Object.keys(data[0]).map(field => [field, 'string', '0']));
+
+        setColumns(Object.keys(data[0]).map(field => {
+            let type = 'string';
+            if (!isNaN(data[0][field])) {
+                type = 'number';
+            }
+            return [field, type, '0', 'none']
+        }));
         setRows(tempRows);
     }
 
@@ -131,6 +122,89 @@ function Data() {
         }
     }
 
+    const toOneHot = (j, value) => {
+        const uniqueValues = getUniqueValues(j);
+        const uniqueValue = uniqueValues.indexOf(value);
+        const numClasses = uniqueValues.length
+
+        const oneHot = Array(numClasses).fill(0);
+        oneHot[uniqueValue] = 1;
+        return oneHot;
+    }
+
+    const onSendData = () => {
+        const inputCols = columns.map((x, k) => x[2] === '0' ? k : null).filter(x => x !== null);
+        const outputCols = columns.map((x, k) => x[2] === '1' ? k : null).filter(x => x !== null);
+
+        let inputs = [];
+        let outputs = [];
+
+        for (let i in rows) {
+            let currentInput = [];
+            let currentOutput = [];
+
+            i = Number(i);
+            for (let j in rows[i]) {
+                j = Number(j);
+                let value = rows[i][j];
+
+                const columnType = columns[j][1];
+                const columnCoding = columns[j][3];
+
+                if (columnType === 'string') {
+                    if (columnCoding !== 'onehot') {
+                        alert('Las redes neuronales no pueden manejar cadenas. Puede usar algun tipo de codificación')
+                        return;
+                    }
+                    value = value.toString();
+                } else if (columnType === 'number') {
+                    value = Number(value);
+                    if (isNaN(value)) {
+                        alert('No es posible convertir la columna "'+columns[j][0] + '" a numérica');
+                        return;
+                    }
+                }
+
+                if (columnCoding === 'onehot') {
+                    value = toOneHot(
+                        j, value
+                    );
+                } else {
+                    value = [value];
+                }
+
+                if (inputCols.includes(j)) {
+                    currentInput = currentInput.concat(value);
+                }
+                else if (outputCols.includes(j)) {
+                    currentOutput = currentOutput.concat(value);
+                }
+            }
+
+            inputs.push(currentInput);
+            outputs.push(currentOutput);
+        }
+
+        setInputs(inputs);
+        setOutputs(outputs);
+
+        if(outputs[0].length === 0) {
+            alert('No hay ninguna salida');
+            return;
+        }
+
+        console.log(inputs)
+        console.log(outputs)
+
+        navigate('/model/perceptron');
+    }
+
+    const setColumnCodification = (e, i) => {
+        const tempColumns = [...columns];
+        tempColumns[i][3] = e.target.value;
+        setColumns(tempColumns);
+    }
+
     return (
         <div className="perceptron-model">
             <div className="min-h-screen relative items-start">
@@ -145,13 +219,6 @@ function Data() {
 
                     <div className="text-2xl font-bold col-span-12">Tus datos</div>
 
-                    <div className="text-lg col-span-8">¿Qué desea hacer?</div>
-                    <select className="col-span-4" value={resultType} onChange={e => setResultType(e.target.value)}>
-                        {
-                            Object.keys(RESULT_TYPE).map(res_type => <option value={res_type}>{RESULT_TYPE[res_type]}</option>)
-                        }
-                    </select>
-
                     <div className="text-2xl font-bold col-span-11">Registros</div>
                     <div className="col-span-1"><button onClick={addRow}><FontAwesomeIcon icon={faCirclePlus} size="lg" /></button></div>
 
@@ -159,16 +226,26 @@ function Data() {
                     <div className="col-span-1"><button onClick={addColumn}><FontAwesomeIcon icon={faCirclePlus} size="lg" /></button></div>
                     {
                         columns.map((x, i) => <>
-                            <div className="col-span-6">{columns[i][0]}</div>
-
-                            <select className="col-span-3" value={columns[i][1]} onChange={e => setColumnType(e, i)}>
+                            <div className="col-span-12 text-xl font-bold">Columna {i + 1}, "{columns[i][0]}"</div>
+                            <div className="text-lg col-span-6">Tipo de dato</div>
+                            <select className="col-span-6 text-lg" value={columns[i][1]} onChange={e => setColumnType(e, i)}>
                                 {
                                     Object.keys(TYPES).map(type_key => <option value={type_key}>{TYPES[type_key]}</option>)
                                 }
                             </select>
-                            <div className="col-span-3">
+                            <div className="text-lg col-span-6">Entrada/Salida</div>
+                            <div className="col-span-6 text-lg">
                                 <button onClick={() => swapInputOutput(i)}>{['Entrada', 'Salida'][columns[i][2]]}</button>
                             </div>
+                            <div className="col-span-6 text-lg">Codificación</div>
+                            <div className="col-span-6">
+                                <select className="w-full text-lg" value={columns[i][3]} onChange={e => setColumnCodification(e, i)}>
+                                    {
+                                        Object.keys(CODIFICATIONS).map(cod => <option value={cod}>{CODIFICATIONS[cod]}</option>)
+                                    }
+                                </select>
+                            </div>
+                            <hr />
                         </>)
                     }
 
@@ -188,6 +265,8 @@ function Data() {
                     <div className="text-xl font-bold col-span-12 py-1">Acciones adicionales</div>
                     <div className="text-lg col-span-8">Eliminar nulos</div>
                     <input className="col-span-4" type="checkbox" name="" id="" />
+                    <br />
+                    <button className="text-xl font-bold py-2 border-4 border-black col-span-12 rounded-md" onClick={onSendData}>Enviar datos</button>
 
                 </div>
                 <div className="bg-slate-300 relative h-full w-full p-4 overflow-x-scroll pl-96 pt-20 min-h-screen">
@@ -204,11 +283,6 @@ function Data() {
                                 rows.map((_, i) => <tr>
                                     {
                                         rows[i].map((x, j) => <td className="border-2 border-black py-2 px-4">
-                                            {
-                                                resultType === 'classification' && <span className="text-sm text-gray-500">({
-                                                    uniqueValues.length > Number(j) && uniqueValues[j].indexOf(rows[i][j])
-                                                })</span>
-                                            }
                                             <input className="bg-transparent" type="text" name="" id="" value={rows[i][j]} onChange={e => updateField(e, i, j)} />
                                         </td>)
                                     }
