@@ -30,6 +30,8 @@ app.use(cors());
 //   console.log('Conexión exitosa a la base de datos');
 // });
 
+let model = null;
+
 // Endpoint para validar login
 app.post('/login', (req, res) => {
   const { username, password } = req.body;
@@ -60,14 +62,26 @@ app.post('/model', async (req, res) => {
     const layersActivations = req.body.layersActivations;
     const optimizer = req.body.optimizer;
     const loss = req.body.loss;
+    const epochs = req.body.epochs;
     
     // console.log(inputs);
     // console.log(outputs);
 
-    const xs = tf.tensor2d(inputs);
-    const ys = tf.tensor2d(outputs);
+    let xs = tf.tensor2d(inputs);
+    let ys = tf.tensor2d(outputs);
 
-    const model = tf.sequential();
+    // const xsmin = xs.min(0)
+    // const xsmax = xs.max(0)
+    // xs = xs.sub(xsmin).div(xsmax.sub(xsmin))
+
+    // const ysmin = ys.min(0)
+    // const ysmax = ys.max(0)
+    // ys = ys.sub(ysmin).div(ysmax.sub(ysmin))
+
+    console.log(await xs.array())
+    console.log(await ys.array())
+
+    model = tf.sequential();
     for(let layer in layers) {
       if(layer == 0) {
         continue;
@@ -82,11 +96,6 @@ app.post('/model', async (req, res) => {
       }
     }
 
-    // const model = tf.sequential();
-    // model.add(tf.layers.dense({ units: 8, activation: 'relu', inputShape: [xs.shape[1]] }));
-    // model.add(tf.layers.dense({ units: 10, activation: 'relu' }));
-    // model.add(tf.layers.dense({ units: ys.shape[1], activation: 'softmax' }));
-
     model.compile({
       optimizer: tf.train[optimizer](),
       loss: loss,
@@ -94,8 +103,8 @@ app.post('/model', async (req, res) => {
     });
 
     await model.fit(xs, ys, {
-      epochs: 1000,
-      batchSize: 16,
+      epochs: epochs,
+      batchSize: 64,
       shuffle: true,
       callbacks: tf.callbacks.earlyStopping({ patience: 5 }),
     });

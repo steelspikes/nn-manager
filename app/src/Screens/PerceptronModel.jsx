@@ -22,7 +22,9 @@ function PerceptronModel() {
         optimizer,
         setOptimizer,
         loss,
-        setLoss
+        setLoss,
+        epochs,
+        setEpochs
     } = useContext(PerceptronContext);
 
     useEffect(() => {
@@ -111,7 +113,7 @@ function PerceptronModel() {
 
     const onTrain = () => {
         axios.post("http://localhost:5000/model", {
-            inputs, outputs, layers, layersActivations, optimizer, loss
+            inputs, outputs, layers, layersActivations, optimizer, loss, epochs
         }).then(res  => {
             console.log('Hola');
         });
@@ -161,7 +163,12 @@ function PerceptronModel() {
                             Object.keys(LOSSES).map(l => <option value={l}>{LOSSES[l]}</option>)
                         }
                     </select>
+
+                    <h1 className="text-xl col-span-11 font-bold">Etapas (epochs)</h1>
+                    <input value={epochs !== 0 ? epochs : ''} className="col-span-8 border-4" type="number" onChange={e => setEpochs(Number(e.target.value))} placeholder="0" />
                     
+                    <hr />
+
                     <button className="text-xl font-bold py-2 border-4 border-black col-span-12 rounded-md" onClick={onTrain}>Entrenar</button>
 
                 </div>

@@ -34,6 +34,7 @@ function App() {
   const [layersActivations, setLayersActivations] = useState(['linear', 'linear', 'linear']);
   const [optimizer, setOptimizer] = useState('adam');
   const [loss, setLoss] = useState('categoricalCrossentropy');
+  const [epochs, setEpochs] = useState(100);
 
   return (
     <div className="App">
@@ -49,7 +50,9 @@ function App() {
         optimizer, 
         setOptimizer,
         loss,
-        setLoss
+        setLoss,
+        epochs,
+        setEpochs
       }}>
         <DataContext.Provider value={{ rows, setRows, columns, setColumns, inputs, setInputs, outputs, setOutputs }}>
           <Navigation></Navigation>

@@ -12,7 +12,9 @@ const PerceptronContext = createContext({
     optimizer: '',
     setOptimizer: (p) => {},
     loss: '',
-    setLoss: (p) => {}
+    setLoss: (p) => {},
+    epochs: 0,
+    setEpochs: (p) => {}
 });
 
 export default PerceptronContext;
