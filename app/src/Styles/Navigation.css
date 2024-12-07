@@ -1,5 +1,6 @@
 .nav {
     nav {
         background-color: var(--pink-3);
+        z-index: 999;
     }
 }

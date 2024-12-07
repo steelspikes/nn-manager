@@ -1,19 +1,24 @@
 import React, { useEffect } from "react";
 import * as d3 from 'd3';
 
-function PerceptronPlot() {
+function PerceptronPlot({
+    bounds,
+    layers,
+    circleRadius
+}) {
     const getPositions = () => {
         let positions = [];
 
-        const LAYERS = [2, 4, 5, 2, 1];
         const BASEX = 0;
         const BASEY = 0;
 
-        for(let ly in LAYERS) {
+        const separation = circleRadius * 3;
+
+        for(let ly in layers) {
             const currentLayer = [];
-            const x = BASEX + (50*(Number(ly) + 1));
-            for(let p = 0; p < LAYERS[ly]; p++) {
-                currentLayer.push({cx: x, cy: BASEY + (50*(p + 1)), arrLine: 'mutation', type: 't_1'});
+            const x = BASEX + (separation*(Number(ly) + 1));
+            for(let p = 0; p < layers[ly]; p++) {
+                currentLayer.push({cx: x, cy: BASEY + (separation*(p + 1)), arrLine: 'mutation', type: 't_1'});
             }   
             positions.push(currentLayer);
         }
@@ -25,8 +30,10 @@ function PerceptronPlot() {
     }
 
     useEffect(() => {
-        const CHART_WIDTH = 500;
-        const CHART_HEIGHT = 500;
+        d3.select('.svgNetwork').select('svg').html('');
+
+        const CHART_WIDTH = bounds.width;
+        const CHART_HEIGHT = bounds.height;
 
         const copy = getPositions();
         const svgNetwork = d3.select('.svgNetwork')
@@ -222,7 +229,7 @@ function PerceptronPlot() {
                     //return d.map( (d) => [d, got] );
                 })
                 .join('circle')
-                .attr('r', 10)
+                .attr('r', circleRadius)
                 .attr('cx', (d) => {
                     if (!!d.typeSign) {
                         let srType = (text) => {
@@ -296,37 +303,10 @@ function PerceptronPlot() {
                 ev.preventDefault();
             });
 
-
-        //coordLines();
-        function coordLines() {
-            svgNetwork
-                .append('line')
-                .attr('class', 'linkX')
-                .attr('x1', 0)
-                .attr('y1', CHART_HEIGHT / 2)
-                .attr('x2', CHART_WIDTH)
-                .attr('y2', CHART_HEIGHT / 2)
-                .attr('opacity', 1)
-                .attr('stroke-width', 0.4)
-                .attr('stroke', '#767676');
-            svgNetwork
-                .append('line')
-                .attr('class', 'linkY')
-                .attr('x1', CHART_WIDTH / 2)
-                .attr('y1', 0)
-                .attr('x2', CHART_WIDTH / 2)
-                .attr('y2', CHART_HEIGHT)
-                .attr('opacity', 1)
-                .attr('stroke-width', 0.4)
-                .attr('stroke', '#767676');
-        }
-
-        console.log('procEnd');
-
-    });
+    }, [bounds, circleRadius, layers]);
 
     return (
-        <div className="perceptron-plot mt-20">
+        <div className="perceptron-plot">
             <div class="svgNetwork" id="neuralNet">
                 <svg></svg>
             </div>
