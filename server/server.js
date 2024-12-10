@@ -31,6 +31,7 @@ app.use(cors());
 // });
 
 let model = null;
+let history = null;
 
 // Endpoint para validar login
 app.post('/login', (req, res) => {
@@ -53,7 +54,41 @@ app.post('/login', (req, res) => {
   });
 });
 
-app.post('/model', async (req, res) => {
+app.post('/model/trained', async (req, res) => {
+  // const evaluation = model.evaluate(xs, ys);
+  // const lossAmount = evaluation[0].dataSync()[0];
+  // const accuracy = evaluation[1].dataSync()[0];
+  // const mse = evaluation[2].dataSync()[0];
+
+  // console.log(lossAmount, accuracy, mse)
+
+  // const prediction = model.predict(xs);
+  // prediction.print();
+
+  console.log(history.history['acc'])
+
+  res.send({
+    success: true,
+    history: {
+      acc: history.history['acc'],
+      loss: history.history['loss'],
+      mse: history.history['mse']
+    }
+  })
+
+});
+
+app.post('/model/predict', (req, res) => {
+  let xs = tf.tensor2d(req.body.inputs);
+  const prediction = model.predict(xs);
+  res.json({
+    success: true,
+    predicted: prediction.arraySync()
+  })
+
+});
+
+app.post('/model/train', async (req, res) => {
   try {
     const inputs = req.body.inputs;
     const outputs = req.body.outputs;
@@ -102,25 +137,23 @@ app.post('/model', async (req, res) => {
       metrics: ['accuracy', 'mse'],
     });
 
-    await model.fit(xs, ys, {
+    history = await model.fit(xs, ys, {
       epochs: epochs,
       batchSize: 64,
       shuffle: true,
       callbacks: tf.callbacks.earlyStopping({ patience: 5 }),
     });
 
-    const evaluation = model.evaluate(xs, ys);
-    const lossAmount = evaluation[0].dataSync()[0];
-    const accuracy = evaluation[1].dataSync()[0];
-    const mse = evaluation[2].dataSync()[0];
-
-    console.log(lossAmount, accuracy, mse)
-
-    const prediction = model.predict(xs);
-    prediction.print();
+    res.json({
+      success: true
+    })
+    
   }
   catch (e) {
-    console.error('Hubo un error', e);
+    res.json({
+      success: false,
+      error: e.message
+    })
   }
 
 });

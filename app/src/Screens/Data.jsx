@@ -7,6 +7,7 @@ import { debounce } from '../Utils/Utils';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import DataContext from "../Contexts/DataContext";
+import Loading from "../Fragments/Loading";
 
 function Data() {
     const navigate = useNavigate();
@@ -207,6 +208,7 @@ function Data() {
 
     return (
         <div className="perceptron-model">
+            <Loading show={false} text={'Cargandoo'} />
             <div className="min-h-screen relative items-start">
                 <div className="w-96 grid grid-cols-12 p-5 gap-2 fixed overflow-y-scroll h-full pt-16 z-30 bg-white">
                     <div className="col-span-12 grid grid-cols-12 mb-4 gap-3">

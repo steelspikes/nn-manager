@@ -12,6 +12,7 @@ import PaginaPrincipal from './Screens/PaginaPrincipal'; // Ajusta la ruta segú
 import DataContext from './Contexts/DataContext';
 import { useState } from 'react';
 import PerceptronContext from './Contexts/PerceptronContext';
+import Trained from './Screens/Trained';
 
 function App() {
   const [rows, setRows] = useState([
@@ -62,6 +63,7 @@ function App() {
               <Route path="/projects" Component={Projects} />
               <Route path="/model/perceptron" Component={PerceptronModel} />
               <Route path="/model/data" Component={Data} />
+              <Route path="/model/trained" Component={Trained} />
             </Routes>
           </BrowserRouter>
         </DataContext.Provider>

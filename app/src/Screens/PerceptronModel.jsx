@@ -1,15 +1,19 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import PerceptronPlot from "../Fragments/PerceptronPlot";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMinus, faMinusCircle, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlassMinus, faMagnifyingGlassPlus, faMinus, faMinusCircle, faPlus, faPlusCircle } from "@fortawesome/free-solid-svg-icons";
 import { layer } from "@fortawesome/fontawesome-svg-core";
 import DataContext from "../Contexts/DataContext";
 import PerceptronContext from "../Contexts/PerceptronContext";
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
+import Loading from "../Fragments/Loading";
 
 function PerceptronModel() {
     const plotRef = useRef(null);
     const { inputs, outputs } = useContext(DataContext);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
     const {
         plotCBounds,
         setPlotCBounds,
@@ -112,15 +116,22 @@ function PerceptronModel() {
     }
 
     const onTrain = () => {
-        axios.post("http://localhost:5000/model", {
+        setLoading(true);
+        axios.post("http://localhost:5000/model/train", {
             inputs, outputs, layers, layersActivations, optimizer, loss, epochs
         }).then(res  => {
-            console.log('Hola');
+            setLoading(false);
+            if(res.data.success) {
+                navigate('/model/trained');
+            } else {
+                alert('Hubo un error interno');
+            }
         });
     }
 
     return (
         <div className="perceptron-model">
+            <Loading show={loading} text={'Entrenando tu modelo'} />
             <div className="min-h-screen relative items-start">
                 <div className="w-96 h-screen fixed z-20 bg-white grid grid-cols-12 p-5 gap-3 pt-20 overflow-y-scroll">
                     <div className="col-span-12 grid grid-cols-12">
@@ -169,17 +180,17 @@ function PerceptronModel() {
                     
                     <hr />
 
-                    <button className="text-xl font-bold py-2 border-4 border-black col-span-12 rounded-md" onClick={onTrain}>Entrenar</button>
+                    <button className="text-xl font-bold py-2 border-4 border-black col-span-12 rounded-md" onClick={onTrain}>{loading ? 'Entrenando...' : 'Entrenar'}</button>
 
                 </div>
                 <div className="bg-slate-300 w-full pt-20 relative pl-96 overflow-x-hidden h-screen" ref={plotRef}>
                     <PerceptronPlot bounds={plotCBounds} layers={layers} circleRadius={plotZoom} />
                     <div className="absolute top-16 right-0">
                         <button className="size-12" onClick={increaseZoom}>
-                            <FontAwesomeIcon icon={faPlusCircle} size="2x" />
+                            <FontAwesomeIcon icon={faMagnifyingGlassPlus} size="2x" />
                         </button>
                         <button className="size-12" onClick={decreaseZoom}>
-                            <FontAwesomeIcon icon={faMinusCircle} size="2x" />
+                            <FontAwesomeIcon icon={faMagnifyingGlassMinus} size="2x" />
                         </button>
                     </div>
                 </div>
