@@ -1,0 +1,46 @@
+.body{
+    background: var(--yellow-1);
+}
+
+.inf_box {
+    border-radius: 15px;
+    background-color: var(--yellow-2); /* Color base */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06); /* Sombra suave */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Borde sutil */
+    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animaciones suaves */
+}
+
+.pro_box {
+    border-radius: 15px;
+    border: 2px solid var(--black);
+    background-color: var(--green-3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.pro_box:hover {
+    transform: scale(1.05); /* Aumenta el tamaño un 5% */
+    background-color: var(--green-2); /* Cambia el color si es necesario */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1); /* Aumenta la sombra */
+    padding: 0px;
+    cursor: pointer;
+}
+
+.n_pro_box {
+    border-radius: 15px;
+    border: 2px solid var(--black);
+    background-color: var(--green-1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.n_pro_box:hover {
+    transform: scale(1.05); /* Aumenta el tamaño un 5% */
+    background-color: var(--green-2); /* Cambia el color si es necesario */
+    box-shadow: 0 8px 10px rgba(0, 0, 0, 0.15), 0 4px 6px rgba(0, 0, 0, 0.1); /* Aumenta la sombra */
+    padding: 0px;
+    cursor: pointer;
+}

@@ -7,6 +7,7 @@ import { debounce } from '../Utils/Utils';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
 import DataContext from "../Contexts/DataContext";
+import '../Styles/Data.css';
 
 function Data() {
     const navigate = useNavigate();
@@ -249,8 +250,7 @@ function Data() {
                         </>)
                     }
 
-                    <hr />
-
+                    <hr/>
                     <div className="text-2xl font-bold col-span-12">Preprocesamiento</div>
                     <hr />
                     <div className="text-xl font-bold col-span-12 py-1">Dividir datos</div>

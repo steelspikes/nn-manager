@@ -1,6 +1,6 @@
 .login {
 	.body {
-		background: var(--pink-1);
+		background: var(--yellow-1);
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -41,8 +41,8 @@
 	
 	button {
 		border-radius: 15px;
-		border: 1px solid var(--pink-1);
-		/*border: 1px solid var(--pink-1);*/
+		border: 1px solid var(--yellow-1);
+		/*border: 1px solid var(--yellow-1);*/
 		background-color: var(--green-2);
 		color: black;
 		font-size: 12px;
@@ -51,7 +51,7 @@
 		letter-spacing: 1px;
 		text-transform: uppercase;
 		transition: transform 80ms ease-in;
-		border-color: var(--pink-3);
+		border-color: var(--yellow-3);
 	}
 	
 	button:active {
@@ -64,7 +64,7 @@
 	
 	button.ghost {
 		background-color: transparent;
-		border-color: var(--pink-3);
+		border-color: var(--yellow-3);
 	}
 	
 	form {
@@ -79,7 +79,7 @@
 	}
 	
 	input {
-		background-color: var(--pink-1);
+		background-color: var(--yellow-1);
 		border: none;
 		padding: 12px 25px;
 		margin: 18px 0;
@@ -87,7 +87,7 @@
 	}
 	
 	.container {
-		background-color: var(--pink-2);
+		background-color: var(--yellow-2);
 		border-radius: 10px;
 		  box-shadow: 0 14px 28px var(--black),
 				0 10px 10px var(--black);
