@@ -1,17 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
 import '../Styles/Login.css';
 import axios from "axios";
 
 function Login() {
-  const hola = (e) => {
+  // Función para manejar los clicks en los botones de registro e inicio de sesión
+  useEffect(() => {
+    const signUpButton = document.getElementById("signUp");
+    const signInButton = document.getElementById("signIn");
+    const container = document.getElementById("container");
+
+    const addRightPanelActive = () => container.classList.add("right-panel-active");
+    const removeRightPanelActive = () => container.classList.remove("right-panel-active");
+
+    signUpButton.addEventListener("click", addRightPanelActive);
+    signInButton.addEventListener("click", removeRightPanelActive);
+
+    // Cleanup de eventos al desmontar el componente
+    return () => {
+      signUpButton.removeEventListener("click", addRightPanelActive);
+      signInButton.removeEventListener("click", removeRightPanelActive);
+    };
+  }, []);
+
+  // Función para manejar el envío del formulario
+  const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:5000/login", {
-      username: "Marcus Dantus",
-      password: "password123"
-    }).then(res  => {
-      alert(res.data.Message)
-    });
-  }
+    axios
+      .post("http://localhost:5000/login", {
+        username: "Marcus Dantus",
+        password: "password123"
+      })
+      .then((res) => {
+        alert(res.data.Message);
+      });
+  };
 
   return (
     <div className="login">
@@ -24,7 +46,9 @@ function Login() {
               <input type="email" placeholder="Correo" />
               <input type="password" placeholder="Contraseña" />
               <input type="password" placeholder="Confirmar contraseña" />
-              <button onClick={hola} className="ghost">Registrarse</button>
+              <button onClick={handleSubmit} className="ghost">
+                Registrarse
+              </button>
             </form>
           </div>
           <div className="form-container sign-in-container">
@@ -33,7 +57,7 @@ function Login() {
               <input type="email" placeholder="Correo" />
               <input type="password" placeholder="Contraseña" />
               <a href="#">¿Olvidaste tu contraseña?</a>
-              <button onClick={hola}>Ingresar</button>
+              <button onClick={handleSubmit}>Ingresar</button>
             </form>
           </div>
           <div className="overlay-container">
@@ -41,12 +65,16 @@ function Login() {
               <div className="overlay-panel overlay-left">
                 <h1>Ya eres miembro!</h1>
                 <p>Para ingresar solo necesitas tu correo y contraseña</p>
-                <button className="ghost" id="signIn">Ingresar</button>
+                <button className="ghost" id="signIn">
+                  Ingresar
+                </button>
               </div>
               <div className="overlay-panel overlay-right">
                 <h1>Aun no eres miembro</h1>
-                <p>Crea una cuenta para que puedas acceder a todos nuestras funciones</p>
-                <button className="ghost" id="signUp">Registrarse</button>
+                <p>Crea una cuenta para que puedas acceder a todas nuestras funciones</p>
+                <button className="ghost" id="signUp">
+                  Registrarse
+                </button>
               </div>
             </div>
           </div>
@@ -57,6 +85,7 @@ function Login() {
 }
 
 export default Login;
+
 
 // import React, { useState } from "react";
 // import '../Styles/Login.css';
