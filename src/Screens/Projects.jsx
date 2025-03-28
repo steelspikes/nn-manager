@@ -1,4 +1,5 @@
 import React from "react";
+import '../Styles/Login.css';
 
 function Projects() {
   const hola = (e) => {
