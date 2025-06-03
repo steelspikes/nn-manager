@@ -211,8 +211,8 @@ function Data() {
         <div className="perceptron-model">
             <Loading show={false} text={'Cargandoo'} />
             <div className="min-h-screen relative items-start">
-                <div className="w-96 grid grid-cols-12 p-5 gap-2 fixed overflow-y-scroll h-full pt-16 z-30 bg-white">
-                    <div className="col-span-12 grid grid-cols-12 mb-4 gap-3">
+                <div className="w-96 grid grid-cols-12 p-5 gap-2 fixed overflow-y-scroll h-full z-30 bg-white">
+                    <div className="col-span-12 grid grid-cols-12 mb-4 gap-3 pt-16">
                         <h1 className="text-2xl col-span-11 font-bold">Datos de entrenamiento</h1>
                         <input className="hidden" type="file" accept=".csv" onChange={handleFileChange} ref={inputRef} />
                         <div onClick={requestImport} className="border-dotted border-4 border-black col-span-12 text-2xl text-center font-bold py-10 rounded-md">

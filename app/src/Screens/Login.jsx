@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import '../Styles/Login.css';
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
   // Función para manejar los clicks en los botones de registro e inicio de sesión
   useEffect(() => {
     const signUpButton = document.getElementById("signUp");
@@ -25,6 +27,8 @@ function Login() {
   // Función para manejar el envío del formulario
   const handleSubmit = (e) => {
     e.preventDefault();
+    navigate('projects')
+    return
     axios
       .post("http://localhost:5000/login", {
         username: "Marcus Dantus",

@@ -40,7 +40,7 @@ function Projects() {
           {
             [availableModels[0]].map(m => <div className="rounded-md grid">
               <div className="w-full flex justify-center" onClick={() => navigate('/model/data')}>
-                <div className="w-full h-44 bg-gray-300 flex justify-center">
+                <div className="w-full h-44 bg-gray-300 flex justify-center pro_box">
                   <img className="w-1/2 object-contain" src="https://cdn-icons-png.flaticon.com/512/6461/6461819.png" alt="" srcset="" />
                 </div>
               </div>

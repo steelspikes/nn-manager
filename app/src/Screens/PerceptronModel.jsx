@@ -133,8 +133,8 @@ function PerceptronModel() {
         <div className="perceptron-model">
             <Loading show={loading} text={'Entrenando tu modelo'} />
             <div className="min-h-screen relative items-start">
-                <div className="w-96 h-screen fixed z-20 bg-white grid grid-cols-12 p-5 gap-3 pt-20 overflow-y-scroll">
-                    <div className="col-span-12 grid grid-cols-12">
+                <div className="w-96 h-screen fixed z-20 bg-white grid grid-cols-12 p-5 gap-3 overflow-y-scroll">
+                    <div className="col-span-12 grid grid-cols-12 pt-20">
                         <h1 className="text-2xl col-span-11 font-bold">Capas</h1>
                         <button className="col-span-1" onClick={addHiddenLayer}>
                             <FontAwesomeIcon icon={faPlusCircle} size="xl" />
