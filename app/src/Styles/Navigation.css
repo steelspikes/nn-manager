@@ -1,0 +1,6 @@
+.nav {
+    nav {
+        background-color: var(--green-3);
+        z-index: 999;
+    }
+}

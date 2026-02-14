@@ -1,0 +1,123 @@
+/* Contenedor principal */
+.perceptron-model {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Panel izquierdo (Configuración de datos) */
+.min-h-screen {
+    display: flex;
+    flex-direction: row;
+}
+
+.w-96 {
+    width: 384px; /* Ancho fijo para el panel */
+    background-color: var(--yellow-2); /* Color amarillo claro */
+    border-right: 2px solid var(--black);
+    padding: 20px;
+    box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.text-2xl {
+    font-size: 24px;
+}
+
+.py-10 {
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+
+.rounded-md {
+    border-radius: 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+.grid-cols-12 {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.text-lg {
+    font-size: 18px;
+}
+
+.py-1 {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+/* Botones */
+button {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    cursor: pointer;
+    border: 2px solid var(--black);
+    background-color: var(--green-3); /* Verde */
+    color: var(--white);
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: var(--green-2); /* Verde oscuro */
+}
+
+/* Input y select */
+input, select {
+    border: 1px solid #ccc;
+    padding: 8px;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 15px;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--green-1);
+}
+
+/* Tabla */
+.table {
+    flex-wrap: wrap;
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--white);
+}
+
+.table th,
+.table td {
+    border: 1px solid var(--black);
+    text-align: left;
+    padding: 8px;
+}
+
+.table th {
+    background-color: var(--green-3); /* Verde claro */
+    color: var(--white);
+}
+
+.table input {
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+}
+
+/* Fondo del área principal */
+.bg-slate-300 {
+    background-color: var(--yellow-1); /* Gris claro */
+    overflow-x: auto;
+}
+
+.relative {
+    position: relative;
+}
+
+.overflow-x-scroll {
+    overflow-x: scroll;
+}
